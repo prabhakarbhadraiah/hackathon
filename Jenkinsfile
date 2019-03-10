@@ -1,10 +1,11 @@
-pipeline {
-    agent { any }
-    stages {
-        stage('build') {
-            steps {
-                sh 'mvn --version'
-            }
-        }
-    }
+node {
+	stage 'Checkout'
+		checkout scm
+
+	stage 'Build'
+		sh 'mvn clean package'
+
+	stage 'Deploy'
+		archive 'ProjectName/bin/Release/**'
+
 }
