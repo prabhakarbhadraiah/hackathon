@@ -16,7 +16,7 @@ pipeline {
         stage ('Build') {
             steps {
                 sh 'mvn clean package'
-                sh 'ls -la'
+                archiveArtifacts 'targets/*.war'
             }
         }
     }
