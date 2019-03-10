@@ -1,17 +1,10 @@
 pipeline {
-  agent any {
+    agent { docker { image 'maven:3.3.3' } }
     stages {
-      stage('build'){
-        steps{
-          echo '[+] Building Project'
+        stage('build') {
+            steps {
+                sh 'mvn --version'
+            }
         }
-      }
-       stage('deploy'){
-        steps{
-          echo '[+] Deploying WAR file to Tomcat'
-        }
-      }
-      
     }
-  }
 }
