@@ -1,4 +1,5 @@
-node {
+pipeline {
+    agent any
     tools { 
         maven 'Maven' 
     }
@@ -15,7 +16,6 @@ node {
         stage ('Build') {
             steps {
                 sh 'mvn clean package'
-                archiveArtifacts 'target/*.war'
             }
         }
     }
