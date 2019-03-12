@@ -1,5 +1,4 @@
-pipeline {
-    agent any
+node {
     tools { 
         maven 'Maven' 
     }
@@ -17,14 +16,6 @@ pipeline {
             steps {
                 sh 'mvn clean package'
                 archiveArtifacts 'target/*.war'
-            }
-        }
-        
-        stage ('Deploy') {
-            steps {
-                
-                       sh 'scp -o StrictHostKeyChecking=no target/*.war root@172.17.0.1:/home/devsecops/apache-tomcat-8.5.38/webapps/'
-                
             }
         }
     }
