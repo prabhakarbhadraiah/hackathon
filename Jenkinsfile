@@ -13,6 +13,12 @@ pipeline {
             }
         }
 
+	stage ('Source-Composition-Analysis') {
+	   steps {
+			sh ''' pwd '''
+		}
+	}
+
         stage ('Build') {
             steps {
                 sh 'mvn clean package'
