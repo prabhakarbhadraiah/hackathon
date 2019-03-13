@@ -14,9 +14,8 @@ pipeline {
         }
 
 	stage ('Source-Composition-Analysis') {
-	   steps {
-			sh '''bash owasp-dependency-check.sh'''
-		}
+			mvn 'org.owasp:dependency-check-maven:check -Ddependency-check-format=XML'
+			step([$class: 'DependencyCheckPublisher', unstableTotalAll: '0'])
 	}
 
         stage ('Build') {
