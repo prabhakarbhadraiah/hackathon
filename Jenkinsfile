@@ -15,8 +15,8 @@ pipeline {
 
 	stage ('Source-Composition-Analysis') {
 		steps {
-			mvn 'org.owasp:dependency-check-maven:check -Ddependency-check-format=XML'
-			step([$class: 'DependencyCheckPublisher', unstableTotalAll: '0'])
+		     sh 'bash owasp-dependency-check.sh'
+		     sh 'cat /root/OWASP-Dependency-Check/reports/dependency-check-report.xml' 
 		}
 	}
 
