@@ -13,17 +13,20 @@ pipeline {
             }
         }
 
-	stage ('Source-Composition-Analysis') {
-	   steps {
-			sh '''bash owasp-dependency-check.sh'''
-		}
-	}
-
-        stage ('Build') {
+	  stage ('Build') {
             steps {
                 sh 'mvn clean package'
             }
-        }
+        }    
+	    
+	stage ('Source-Composition-Analysis') {
+		steps {
+		     sh 'bash owasp-dependency-check.sh'
+		     sh ''' python upload-results.py --host 127.0.0.1:8000 --api_key 374d66dad8b2b10a54437d04e5fa83819a10b752 --engagement_id 1 --result_file /root/OWASP-Dependency-Check/reports/dependency-check-report.xml --username admin --scanner "Dependency Check Scan" ''' 
+		}
+	}
+
+      
         
         stage ('Deploy-To-Tomcat') {
             steps {
