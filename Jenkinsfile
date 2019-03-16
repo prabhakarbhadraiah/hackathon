@@ -13,6 +13,12 @@ pipeline {
             }
         }
 
+	  stage ('Build') {
+            steps {
+                sh 'mvn clean package'
+            }
+        }    
+	    
 	stage ('Source-Composition-Analysis') {
 		steps {
 		     sh 'bash owasp-dependency-check.sh'
@@ -20,11 +26,7 @@ pipeline {
 		}
 	}
 
-        stage ('Build') {
-            steps {
-                sh 'mvn clean package'
-            }
-        }
+      
         
         stage ('Deploy-To-Tomcat') {
             steps {
