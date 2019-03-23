@@ -45,7 +45,7 @@ pipeline {
     }
 	 
 	    
-	    
+	    try { 
 	    stage ('DAST') {
 		    	steps {
 			    sshagent(['zap']) {
@@ -53,6 +53,10 @@ pipeline {
 			    }
 		    }
 		}    
+	}
+	    catch (err) {
+		echo err    
+	    }
 	
     }
 }
