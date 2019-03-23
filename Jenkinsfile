@@ -12,6 +12,12 @@ pipeline {
                 ''' 
             }
         }
+	    
+	    stage ('Check-Git-Secrets') {
+		sh 'docker pull secfigo/trufflehog'
+		sh 'docker run --user $(id -u):$(id -g) -v $(pwd):/src --rm secfigo/trufflehog trufflehog file:///src'
+	    }
+	    
 
 	  stage ('Build') {
             steps {
