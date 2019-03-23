@@ -15,8 +15,8 @@ pipeline {
 	    
 	    stage ('Check-Git-Secrets') {
 		    steps {
-		sh 'pip install truffleHog'
-		sh 'truffleHog --regex --entropy=False https://github.com/devopssecure/webapp.git > trufflehog.json'
+		sh 'docker pull gesellix/trufflehog'
+		sh 'docker run -it gesellix/trufflehog https://github.com/devopssecure/webapp.git'
 	    }
 	    }
 	    
