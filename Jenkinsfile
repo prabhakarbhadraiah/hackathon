@@ -17,8 +17,6 @@ pipeline {
 		    steps {
 		sh 'docker run -t --rm -v $(pwd):/etc/trufflehog/history trufflehog /bin/bash'
 		sh 'trufflehog https://github.com/devopssecure/webapp.git > trufflehog.json'
-
-'
 	    }
 	    }
 	    
