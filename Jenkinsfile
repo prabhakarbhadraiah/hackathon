@@ -52,7 +52,11 @@ pipeline {
            }       
     }
 	 
-	    
+	    stage ('Port Scan') {
+		    steps {
+			sh 'docker run --rm -v "$(pwd)":/data uzyexe/nmap -sS -sV -oA nmap 54.86.226.84'
+		    }
+	    }
 	    
 	    stage ('DAST') {
 		  
