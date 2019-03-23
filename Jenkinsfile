@@ -15,8 +15,10 @@ pipeline {
 	    
 	    stage ('Check-Git-Secrets') {
 		    steps {
-		sh 'docker pull secfigo/trufflehog'
-		sh 'docker run --user $(id -u):$(id -g) -v $(pwd):/src --rm secfigo/trufflehog trufflehog file:///src'
+		sh 'docker run -t --rm -v $(pwd):/etc/trufflehog/history trufflehog /bin/bash'
+		sh 'trufflehog https://github.com/devopssecure/webapp.git > trufflehog.json'
+
+'
 	    }
 	    }
 	    
