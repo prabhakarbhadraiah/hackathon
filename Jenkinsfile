@@ -67,7 +67,12 @@ pipeline {
 			}
 		}    
 	
-	  
+	    stage ('Nikto Scan') {
+		    steps {
+			sh 'docker pull secfigo/nikto:latest'
+			sh 'docker run --user $(id -u):$(id -g) --rm -v $(pwd):/report -i secfigo/nikto:latest -h 54.86.226.84 -p 8080 -output /report/nikto-output.xml'
+		    }
+	    }
 	
     }
 }
