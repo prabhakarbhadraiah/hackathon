@@ -18,6 +18,7 @@ pipeline {
 	        sh 'rm trufflehog'
 		sh 'docker pull gesellix/trufflehog'
 		sh 'docker run -t gesellix/trufflehog --json https://github.com/devopssecure/webapp.git > trufflehog'
+		sh 'cat trufflehog'
 	    }
 	    }
 	    
@@ -34,6 +35,7 @@ pipeline {
 		     sh 'wget https://raw.githubusercontent.com/devopssecure/webapp/master/owasp-dependency-check.sh'	
 		     sh 'chmod +x owasp-dependency-check.sh'
 		     sh 'bash owasp-dependency-check.sh'
+		     sh 'cat /var/lib/jenkins/OWASP-Dependency-Check/reports/dependency-check-report.xml'
 		}
 	}
 
@@ -57,6 +59,7 @@ pipeline {
 		    steps {
 			sh 'rm nmap*'
 			sh 'docker run --rm -v "$(pwd)":/data uzyexe/nmap -sS -sV -oX nmap 54.86.226.84'
+			sh 'cat nmap'
 		    }
 	    }
 	    
@@ -73,6 +76,7 @@ pipeline {
 		    steps {
 			sh 'docker pull secfigo/nikto:latest'
 			sh 'docker run --user $(id -u):$(id -g) --rm -v $(pwd):/report -i secfigo/nikto:latest -h 54.86.226.84 -p 8080 -output /report/nikto-output.xml'
+			sh 'cat /report/nikto-output.xml'   
 		    }
 	    }
 	    
@@ -80,6 +84,7 @@ pipeline {
 		    steps {
 			sh 'pip install sslyze==1.4.2'
 			sh 'python -m sslyze --regular 54.86.226.84:8080 --json_out sslyze-output.json'
+			sh 'cat sslyze-output.json'
 		    }
 	    }
 	    
@@ -88,10 +93,11 @@ pipeline {
 			sh 'pip install requests'
 			sh 'wget https://raw.githubusercontent.com/devopssecure/webapp/master/upload-results.py'
 			sh 'chmod +x upload-results.py'
-			sh 'python upload-results.py --host 3.81.3.77:80 --api_key 66879c160803596f132aff025fee9a170366f615 --engagement_id 3 --result_file trufflehog --username admin --scanner "SSL Labs Scan"'
-			sh 'python upload-results.py --host 3.81.3.77:80 --api_key 66879c160803596f132aff025fee9a170366f615 --engagement_id 3 --result_file /var/lib/jenkins/OWASP-Dependency-Check/reports/dependency-check-report.xml --username admin --scanner "Dependency Check Scan"'
-			sh 'python upload-results.py --host 3.81.3.77:80 --api_key 66879c160803596f132aff025fee9a170366f615 --engagement_id 3 --result_file nmap.xml --username admin --scanner "Nmap Scan"'
-			sh 'python upload-results.py --host 3.81.3.77:80 --api_key 66879c160803596f132aff025fee9a170366f615 --engagement_id 3 --result_file sslyze-output.json --username admin --scanner "SSL Labs Scan"'
+			sh 'python upload-results.py --host 3.81.3.77:80 --api_key 66879c160803596f132aff025fee9a170366f615 --engagement_id 4 --result_file trufflehog --username admin --scanner "SSL Labs Scan"'
+			sh 'python upload-results.py --host 3.81.3.77:80 --api_key 66879c160803596f132aff025fee9a170366f615 --engagement_id 4 --result_file /var/lib/jenkins/OWASP-Dependency-Check/reports/dependency-check-report.xml --username admin --scanner "Dependency Check Scan"'
+			sh 'python upload-results.py --host 3.81.3.77:80 --api_key 66879c160803596f132aff025fee9a170366f615 --engagement_id 4 --result_file nmap --username admin --scanner "Nmap Scan"'
+			sh 'python upload-results.py --host 3.81.3.77:80 --api_key 66879c160803596f132aff025fee9a170366f615 --engagement_id 4 --result_file sslyze-output.json --username admin --scanner "SSL Labs Scan"'
+			sh 'python upload-results.py --host 3.81.3.77:80 --api_key 66879c160803596f132aff025fee9a170366f615 --engagement_id 4 --result_file /report/nikto-output.xml --username admin --scanner "Nikto"'
 			    
 		    }
 	    }
