@@ -15,7 +15,7 @@ pipeline {
 	    
 	    stage ('Check-Git-Secrets') {
 		    steps {
-	        sh 'rm trufflehog'
+	        sh 'rm trufflehog || true'
 		sh 'docker pull gesellix/trufflehog'
 		sh 'docker run -t gesellix/trufflehog --json https://github.com/devopssecure/webapp.git > trufflehog'
 		sh 'cat trufflehog'
@@ -31,7 +31,7 @@ pipeline {
 	    
 	stage ('Source-Composition-Analysis') {
 		steps {
-		     sh 'rm owasp-*'
+		     sh 'rm owasp-* || true'
 		     sh 'wget https://raw.githubusercontent.com/devopssecure/webapp/master/owasp-dependency-check.sh'	
 		     sh 'chmod +x owasp-dependency-check.sh'
 		     sh 'bash owasp-dependency-check.sh'
@@ -57,7 +57,7 @@ pipeline {
 	 
 	    stage ('Port Scan') {
 		    steps {
-			sh 'rm nmap*'
+			sh 'rm nmap* || true'
 			sh 'docker run --rm -v "$(pwd)":/data uzyexe/nmap -sS -sV -oX nmap 54.86.226.84'
 			sh 'cat nmap'
 		    }
@@ -74,7 +74,7 @@ pipeline {
 	
 	    stage ('Nikto Scan') {
 		    steps {
-			sh 'rm nikto-output.xml'
+			sh 'rm nikto-output.xml || true'
 			sh 'docker pull secfigo/nikto:latest'
 			sh 'docker run --user $(id -u):$(id -g) --rm -v $(pwd):/report -i secfigo/nikto:latest -h 54.86.226.84 -p 8080 -output /report/nikto-output.xml'
 			sh 'cat nikto-output.xml'   
