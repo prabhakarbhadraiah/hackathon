@@ -73,6 +73,14 @@ pipeline {
 			sh 'docker run --user $(id -u):$(id -g) --rm -v $(pwd):/report -i secfigo/nikto:latest -h 54.86.226.84 -p 8080 -output /report/nikto-output.xml'
 		    }
 	    }
+	    
+	    stage ('SSL Checks') {
+		    steps {
+			sh 'pip install sslyze==1.4.2'
+			sh 'sslyze --regular 54.86.226.84:8080 --json_out sslyze-output.json'
+		    }
+	    }
+	    
 	
     }
 }
