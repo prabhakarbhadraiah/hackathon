@@ -55,7 +55,8 @@ pipeline {
 	 
 	    stage ('Port Scan') {
 		    steps {
-			sh 'docker run --rm -v "$(pwd)":/data uzyexe/nmap -sS -sV -oA nmap 54.86.226.84'
+			sh 'rm nmap*'
+			sh 'docker run --rm -v "$(pwd)":/data uzyexe/nmap -sS -sV -oX nmap 54.86.226.84'
 		    }
 	    }
 	    
