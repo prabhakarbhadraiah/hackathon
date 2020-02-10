@@ -16,7 +16,7 @@ pipeline {
     stage ('Check-Git-Secrets') {
       steps {
         sh 'rm trufflehog || true'
-        sh 'docker run gesellix/trufflehog --json https://github.com/cehkunal/webapp.git > trufflehog'
+        sh 'docker run gesellix/trufflehog --json https://github.com/prabhakarbhadraiah/Hackathon/tree/master/src/main/webapp.git > trufflehog'
         sh 'cat trufflehog'
       }
     }
@@ -50,7 +50,7 @@ pipeline {
     stage ('Deploy-To-Tomcat') {
             steps {
            sshagent(['tomcat']) {
-                sh 'scp -o StrictHostKeyChecking=no target/*.war ubuntu@13.232.202.25:/prod/apache-tomcat-8.5.39/webapps/webapp.war'
+                sh 'scp -o StrictHostKeyChecking=no **/*.war ec2-user@34.242.166.202:/usr/local/tomcat/webapps/webapp.war'
               }      
            }       
     }
@@ -59,7 +59,7 @@ pipeline {
     stage ('DAST') {
       steps {
         sshagent(['zap']) {
-         sh 'ssh -o  StrictHostKeyChecking=no ubuntu@13.232.158.44 "docker run -t owasp/zap2docker-stable zap-baseline.py -t http://13.232.202.25:8080/webapp/" || true'
+         sh 'ssh -o  StrictHostKeyChecking=no ec2-user@34.240.164.24 "docker run -t owasp/zap2docker-stable zap-baseline.py -t http://34.242.166.202:8080/webapp/" || true'
         }
       }
     }
